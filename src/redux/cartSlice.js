@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 
+
 export const slice = createSlice({
     name: 'cart',
     initialState: {
@@ -8,6 +9,12 @@ export const slice = createSlice({
     },
     reducers: {
 addItemToCart: (state, action) => {
+    const existingItem = state.cartItems.find(cartItem => cartItem.dishId === action.payload.dish.id);
+
+    if (existingItem) {
+        existingItem.quantity += action.payload.quantity;
+        existingItem.totalPrice += action.payload.quantity * action. payload.dish.price;
+    } else {
     const timeId = new Date().getTime()
     state.cartItems.push({
         id: timeId,
@@ -15,6 +22,7 @@ addItemToCart: (state, action) => {
         quantity: action.payload.quantity,
         totalPrice: action.payload.quantity * action.payload.dish.price
     })
+    }
 },
 removeItemFromCart: (state, action) => {
     state.cartItems = state.cartItems.filter(
